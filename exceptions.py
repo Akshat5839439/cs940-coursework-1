@@ -1,9 +1,12 @@
 # Define a base class TubeError(Exception) in exceptions.py, from which all Tube-
 # related custom exceptions you write will inherit.
 class TubeError(Exception):
-    def __init__(self, mesage):
-        self.message = "base Error class TubeError"
-        super().__init__(self.mesage)
+    def __init__(self, message):
+        self.message = ""
+        super().__init__(self.message)
+
+    def valueError(self):
+        return
 
 
 
