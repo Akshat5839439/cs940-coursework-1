@@ -1,16 +1,24 @@
 from branch import Branch
+from exceptions import InvalidBranchIdError
+
 class Line:
-    branches = {}
+    # Initializing the constructor with the variables given in the task and initialziing a dictionary called branches
     def __init__(self, line_id, line_name):
         self.line_id = line_id
         self.line_name = line_name
+        self.branches = {}
 
+    # Storing branch details with branch id as key in branches dictionary
     def add_branch(self, branch):
         self.branches[self.line_id] = branch
 
+    # Retrieving branch using the id provided from the branches dictionary
     def get_branch(self, id):
+        if id not in self.branches:
+            raise InvalidBranchIdError(f"No branch with ID: {id} found")
         return self.branches[id]
 
+    # Retrieving all station IDs from the Branches dictionary
     def get_stations(self):
         all_station_ids = set()
         for branch in self.branches.values():

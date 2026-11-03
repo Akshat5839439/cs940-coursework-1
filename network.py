@@ -2,6 +2,7 @@ from trie import Trie
 from line import Line
 from prediction import Prediction
 from station import Station
+from exceptions import NetworkLineError, NetworkStationDoesNotExistError
 
 class Network:
     def __init__(self):
@@ -17,18 +18,18 @@ class Network:
 
     def get_line(self, line_id):
         if line_id not in self.network["line"]:
-            raise Exception("Line does not exist")
+            raise NetworkLineError("Line does not exist")
         return self.network["line"][line_id]
 
     def add_station(self, station):
         s_name = station.station_name.lower()
-        self.network["station"][station.station_id] = s_name
+        self.network["station"][station.station_id] = station
         self.station_prefix.insert(s_name, station)
 
     def get_station(self, station_id):
         if station_id not in self.network["station"]:
-            raise Exception("No such station in network")
-        return self.network[station_id]
+            raise NetworkStationDoesNotExistError("No such station in network")
+        return self.network["station"][station_id]
 
     def add_prediction(self, prediction):
         train_key = f'{prediction.vehicle_id}{prediction.line_id}'
@@ -39,11 +40,12 @@ class Network:
 
     def next_arrivals_by_station(self, station_id, k):
         result = []
-
-        for pred in self.network["prediction"]:
+        
+        for pred in self.network["prediction"].values():
             if len(result) == k:
                 break
-            if pred.naptan_id == station_id:
+
+            if station_id in pred.naptan_id:
                 result.append(pred)
 
         return result
@@ -51,7 +53,7 @@ class Network:
     def next_arrivals_by_line(self, line_id, k):
         result = []
 
-        for pred in self.network["prediction"]:
+        for pred in self.network["prediction"].values():
             if len(result) == k:
                 break
 
@@ -60,14 +62,14 @@ class Network:
 
         return result
 
-    def next_arrivals_by_station_line(self, station_id, line_id, k):
+    def next_arrivals_by_station_and_line(self, station_id, line_id, k):
         result =[]
 
-        for pred in self.network["prediction"]:
+        for pred in self.network["prediction"].values():
             if len(result) == k:
                 break
 
-            if pred.line_id == line_id and pred.naptan_id == station_id:
+            if pred.line_id == line_id and station_id in pred.naptan_id:
                 result.append(pred)
 
         return result
@@ -75,7 +77,7 @@ class Network:
     def next_stations_by_train(self, vehicle_id, line_id, k):
         result = []
 
-        for pred in self.network["prediction"]:
+        for pred in self.network["prediction"].values():
             if len(result)  == k:
                 break
 
@@ -85,4 +87,4 @@ class Network:
         return result
 
     def __repr__(self):
-        return f"Network(no_of_lines={len(self.network["line"])}, no_of_stations={len(self.network["station"])})"
+        return f"Network(no_of_lines={len(self.network['line'])}, no_of_stations={len(self.network['station'])})"

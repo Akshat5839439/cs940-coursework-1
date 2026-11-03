@@ -3,11 +3,12 @@
 # or empty keys.
 import re
 class Trie:
+    # Initializing the prefix tree
     def __init__(self):
         self.root = TrieNode()
         self.all_objects = []
     
-
+    # Inserting the (key, obj) pair to the tree
     def insert(self, key, obj):
         current = self.root
         words = key.split()
@@ -23,7 +24,7 @@ class Trie:
             current.object.append(obj)
             self.all_objects.append(obj)
 
-
+    
     def search_by_prefix(self, prefix):
         if prefix == "":
             return self.all_objects

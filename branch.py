@@ -1,26 +1,29 @@
 class Branch:
-    stations = []
-
+    # Initializing the constructor with given variables and also initializing a stations list 
     def __init__(self, branch_id, next_branch_ids):
         self.branch_id = branch_id
         self.next_branch_ids = next_branch_ids
-    
+        self.stations = []
+
+    # Adding the station to stations list
     def add_station(self, station):
         self.stations.append(station)
 
+    # Creating a st_edges list to store all the edges between stations by traversing stations list
     def station_edges(self):
-        edges = []
+        st_edges = []
         for i in range(len(self.stations) - 1):
-            edges.append((self.stations[i], self.stations[i + 1]))
+            st_edges.append((self.stations[i], self.stations[i + 1]))
 
-        return edges
+        return st_edges
 
+    # Creating a br_edges list to store all the edges between stations by traversing stations list
     def branch_edges(self):
-        edges = []
+        br_edges = []
         for next_id in self.next_branch_ids:
-            edges.append((self.branch_id, next_id))
+            br_edges.append((self.branch_id, next_id))
 
-        return edges
+        return br_edges
 
     def __iter__(self):
         return iter(self.stations)

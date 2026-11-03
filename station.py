@@ -1,28 +1,30 @@
 import re
 import math
-# Split the zones string on either '+' or '/', handling both delimiters, into a list of zones,
-# and parse interchange_lines (a list of line records, each carrying an id) into a list of
-# line ids. Add checks that lat and lon fall within valid real-world latitude and longitude
-# ranges, otherwise throw an exception;
+from exceptions import InvalidLatLonError
+
+# Checking if Latitude and Longitude are in real-world value range
 def checkLatLon(lat, lon):
         if lat < - 90 or lat > 90:
-            raise ValueError("Latitude must be between -90 and 90 degrees.")
+            raise InvalidLatLonError("Latitude must be between -90 and 90 degrees.")
         if lon < -180 or lon > 180:
-            raise ValueError("Longitude must be between -180 and 180 degrees.")
+            raise InvalidLatLonError("Longitude must be between -180 and 180 degrees.")
 
+# Constructing a Line Modes list so that we can retain the information on modes for each line as we loose this info when we parse 
+# interchange lines later we use Line Modes in is_interchange method 
 def line_mode_constructor(line_modes, interchange_lines):
     for line in interchange_lines:
         line_id = line['id']
         if line_id not in line_modes:
             line_modes[line_id] = []
-        for mode in line['modes']:
+        for mode in line_modes[line_id]:
             if mode not in line_modes[line_id]:
                 line_modes[line_id].append(mode)
 
 class Station:
-    line_modes = {}
+    # Initializing Class using constructor and the variables that have been provided
     def __init__(self, station_id, station_name, interchange_lines, zones, lat, lon):
         checkLatLon(lat, lon)
+        self.line_modes = {}
         line_mode_constructor(self.line_modes, interchange_lines)
         self.station_id = station_id
         self.station_name = station_name
@@ -31,7 +33,7 @@ class Station:
         self.lat = lat
         self.lon = lon
 
-
+    # Checking if this instance of station is a interchange or not by counting the number of lines that go through it
     def is_interchange(self):
         count = 0
         for line in self.line_modes:
@@ -40,6 +42,7 @@ class Station:
 
         return count > 0
 
+    # Using Haversine Formula to calculate distance between 2 stations (self and other)
     def distance_to(self, other):
         r = 6371
         dlat = math.radians(other.lat - self.lat)
@@ -60,3 +63,4 @@ class Station:
 
     def __str__(self):
         return f"Station {self.station_id} {self.station_name} at ({self.lat}, {self.lon}) with zones {self.zones} and interchange lines {self.interchange_lines}"
+

@@ -1,19 +1,32 @@
-# Define a base class TubeError(Exception) in exceptions.py, from which all Tube-
-# related custom exceptions you write will inherit.
+# Tube Related Exceptions
 class TubeError(Exception):
-    def __init__(self, message):
-        self.message = ""
-        super().__init__(self.message)
+    pass
 
-    def valueError(self):
-        return
+class InvalidLatLonError(TubeError):
+    pass
+
+class InvalidBranchIdError(TubeError):
+    pass
+
+class InvalidTimeToStationError(TubeError):
+    pass
 
 
-
-
-# Define a base class DataStructureError(Exception) in exceptions.py, from which all
-# data structure-related custom exceptions you write will inherit.
+# Data Structure Related Errors
 class DataStructureError(Exception):
-    def __init__(self, message):
-        self.message = "base Error class DataStructureError"
-        super().__init__(self.message)
+    pass
+
+class HeapError(DataStructureError):
+    pass
+
+class HeapEmptyError(DataStructureError):
+    pass
+
+class InvalidHeapKvalue(DataStructureError):
+    pass
+
+class NetworkLineError(DataStructureError):
+    pass
+
+class NetworkStationDoesNotExistError(DataStructureError):
+    pass

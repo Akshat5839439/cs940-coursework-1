@@ -19,7 +19,8 @@ def main():
     lines = ['bakerloo', 'central', 'circle', 'district', 'hammersmith-city', 'jubilee', 'metropolitan', 'northern', 'piccadilly', 'victoria', 'waterloo-city']
 
     for line in lines:
-        file = f'{path_to_jsons}/{line}.json'
+        # file = f'{path_to_jsons}/{line}.json'
+        file = f'/dcs/pg26/u5839439/cs940/cw1/lines/{line}.json'
 
         with open(file, 'r') as f:
             obj = json.load(f)
@@ -40,7 +41,7 @@ def main():
         tube.add_line(line_obj)
 
     # Populate our predictions to our network
-    with open(f'{path_to_jsons}/arrivals.json', 'r') as f:
+    with open(f'/dcs/pg26/u5839439/cs940/cw1/arrivals/arrivals-5839439.json', 'r') as f:
         obj = json.load(f)
 
     for arrival in obj:
