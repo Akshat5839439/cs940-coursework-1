@@ -28,9 +28,14 @@ class Station:
         line_mode_constructor(self.line_modes, interchange_lines)
         self.station_id = station_id
         self.station_name = station_name
-        self.interchange_lines = [line['id'] for line in interchange_lines]
+        self.interchange_lines = [line['id'] for line in interchange_lines] 
         self.zones = re.split(r'\s*[+/]\s*', zones)
+        if lat < -90 and lat > 90:
+            raise Exception("Latitude out of range")
         self.lat = lat
+
+        if lon < -180 and lon > 180:
+            raise Exception("Longitude out of range")
         self.lon = lon
 
     # Checking if this instance of station is a interchange or not by counting the number of lines that go through it

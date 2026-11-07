@@ -1,4 +1,4 @@
-from exceptions import HeapError, HeapEmptyError, InvalidHeapKvalue
+from exceptions import HeapEmptyError, InvalidHeapKvalue
 class Minheap:
     # Initializing heap with a empty list and a counter to keep track of insertion counter
     def __init__(self):
@@ -23,34 +23,14 @@ class Minheap:
     # returning error if heap is empty and handling the case when heap has only 1 element in it
     def pop(self):
         if len(self.heap) == 0:
-            raise HeapError("Heap Error")
+            raise HeapEmptyError("Heap is empty")
 
         if len(self.heap) == 1:
             return self.heap.pop()[1]
 
-        self.heap[0], self.heap[len(self.heap) - 1] = self.heap[len(self.heap) - 1], self.heap[0]
+        self.heap[0], self.heap[-1] = self.heap[-1], self.heap[0]
         ele = self.heap.pop()[1]
-        n = len(self.heap)
-
-        i = 0
-
-        while True:
-            left = 2*i + 1
-            right = 2*i + 2
-            smallest = i
-
-            if left < n and (self.heap[left][0], self.heap[left][2]) < (self.heap[smallest][0], self.heap[smallest][2]):
-                smallest = left
-
-            if right < n and (self.heap[right][0], self.heap[right][2]) < (self.heap[smallest][0], self.heap[smallest][2]):
-                smallest = right
-
-            if smallest == i:
-                break
-
-            self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]
-            i = smallest
-
+        self.sift_down(0)
         return ele
 
     # Returning the obj with smallest key without removing it and raising Exception if heap is empty
@@ -141,4 +121,3 @@ class Minheap:
     def __repr__(self):
         return f"MinHeap(heap_length={len(self.heap)}, heap_counter={self.counter})"
     
-

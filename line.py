@@ -10,13 +10,13 @@ class Line:
 
     # Storing branch details with branch id as key in branches dictionary
     def add_branch(self, branch):
-        self.branches[self.line_id] = branch
+        self.branches[branch.branch_id] = branch
 
     # Retrieving branch using the id provided from the branches dictionary
-    def get_branch(self, id):
-        if id not in self.branches:
-            raise InvalidBranchIdError(f"No branch with ID: {id} found")
-        return self.branches[id]
+    def get_branch(self, branch_id):
+        if branch_id not in self.branches:
+            raise InvalidBranchIdError(f"No branch with ID: {branch_id} found")
+        return self.branches[branch_id]
 
     # Retrieving all station IDs from the Branches dictionary
     def get_stations(self):
